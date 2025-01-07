@@ -1,0 +1,67 @@
+server:
+  port: 8001
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${example.datasource.driver-class-name}
+      url: jdbc:mysql://${example.datasource.host}:${example.datasource.port}/${example.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${example.datasource.username}
+      password: ${example.datasource.password}
+  data:
+    redis:
+      host: ${example.redis.host}
+      port: ${example.redis.port}
+      password: ${example.redis.password}
+      database: ${example.redis.database}
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      example:
+        mapper: debug
+        service: info
+        controller: info
+
+example:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: itcast
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
+    user-secret-key: itheima
+    user-ttl: 7200000
+    user-token-name: authentication
+  alioss:
+    endpoint: ${example.alioss.endpoint}
+    access-key-id: ${example.alioss.access-key-id}
+    access-key-secret: ${example.alioss.access-key-secret}
+    bucket-name: ${example.alioss.bucket-name}
+  wechat:
+    appid: ${example.wechat.appid}
+    secret: ${example.wechat.secret}
+    mchid : ${example.wechat.mchid}
+    mchSerialNo: ${example.wechat.mchSerialNo}
+    privateKeyFilePath: ${example.wechat.privateKeyFilePath}
+    apiV3Key: ${example.wechat.apiV3Key}
+    weChatPayCertFilePath: ${example.wechat.weChatPayCertFilePath}
+    notifyUrl: ${example.wechat.notifyUrl}
+    refundNotifyUrl: ${example.wechat.refundNotifyUrl}
+  shop:
+    address: 北京市海淀区上地十街10号
+  baidu:
+    ak: aA3vYe1HXNtlZuuResDmh7nyyT5Qo7uS

@@ -1,9 +1,9 @@
-package org.example.Handler.impl;
+package org.example.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.DTO.OrdersSubmitDTO;
-import org.example.Handler.OrderRepository;
-import org.example.Handler.OrderService;
+import org.example.mapper.OrderMapper;
+import org.example.service.OrderService;
 import org.example.VO.OrderSubmitVO;
 import org.example.common.StatusCode;
 import org.example.entity.Order;
@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private Order order;
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderMapper orderMapper;
 
 
     /*
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(ordersSubmitDTO, order);
 
         // 2. 向订单表插入数据
-        order = orderRepository.save(order);
+        orderMapper.insert(order);
 
 
         String downloadUrl = "https://example.com/download/" + order.getId();  // 假设订单 ID 为下载链接的组成部分

@@ -25,6 +25,8 @@ public class User implements Serializable {
 
     //姓名
     private String userName;
+    //密码
+    private String password;
 
     //手机号
     private String phone;

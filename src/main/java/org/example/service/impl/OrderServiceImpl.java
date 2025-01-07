@@ -47,7 +47,6 @@ public class OrderServiceImpl implements OrderService {
         // 2. 向订单表插入数据
         orderMapper.insert(order);
 
-
         String downloadUrl = "https://example.com/download/" + order.getId();  // 假设订单 ID 为下载链接的组成部分
         String expiry = "1h";  // 假设有效期为1小时
         // 构建返回数据对象

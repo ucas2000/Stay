@@ -22,10 +22,19 @@ public interface UserMapper {
     /**
      * @description:
      * @author: lyc 
-     * @date: 2025/1/7 11:17
+     * @date: 2025/1/7 19:45
      * @param idNumber
      * @return: 
      **/
     @Select("select * from user where id_number = #{idNumber}")
-    User getByOpenid(String idNumber);
+    int getByidNumber(String idNumber);
+
+    /**
+     * @description:
+     * @author: lyc
+     * @date: 2025/1/7 19:53
+     * @param userParam
+     * @return: 
+     **/
+    User login(User userParam);
 }

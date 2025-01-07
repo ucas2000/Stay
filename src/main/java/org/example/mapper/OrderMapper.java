@@ -30,5 +30,12 @@ public interface OrderMapper {
     @Select("select * from order where request_Id = #{requestId}")
     Order selectById(String id);
 
-
+    /**
+     * @description:
+     * @author: lyc
+     * @date: 2025/1/7 20:57
+     * @param ordersDB
+     * @return:
+     **/
+    void update(Order ordersDB);
 }

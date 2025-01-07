@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.DTO.OrdersSubmitDTO;
+import org.example.VO.OrderProcessVO;
 import org.example.VO.OrderSubmitVO;
 import org.example.entity.Order;
 
@@ -21,8 +22,8 @@ public interface OrderService {
     OrderSubmitVO submit(OrdersSubmitDTO ordersSubmitDTO);
 
     //删除订单
-    boolean deleteOrder(Order order);
+    String userCancelById(String requestId);
 
     // 查询订单 by ID
-    Optional<Order> getOrderById(String orderId);
+    String getOrderStatus(String orderId);
 }

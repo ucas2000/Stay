@@ -1,7 +1,10 @@
 package org.example.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.DTO.OrdersSubmitDTO;
+import org.example.VO.OrderProcessVO;
+import org.example.common.CustomException;
 import org.example.mapper.OrderMapper;
 import org.example.service.OrderService;
 import org.example.VO.OrderSubmitVO;
@@ -50,26 +53,68 @@ public class OrderServiceImpl implements OrderService {
         String downloadUrl = "https://example.com/download/" + order.getId();  // 假设订单 ID 为下载链接的组成部分
         String expiry = "1h";  // 假设有效期为1小时
         // 构建返回数据对象
-        OrderSubmitVO.OrderSubmitData orderSubmitData = new OrderSubmitVO.OrderSubmitData(
+        OrderSubmitVO orderSubmitVO = new OrderSubmitVO(
                 "accepted",           // 订单状态
                 ordersSubmitDTO.getRequestId(), // 请求 ID
                 downloadUrl,          // 下载链接
                 expiry                // 下载链接有效期
         );
 
-        // 3. 返回插入的订单数据（封装返回结果）
-        OrderSubmitVO orderSubmitVO = new OrderSubmitVO(200,"订单提交成功",orderSubmitData);
 
         return orderSubmitVO;
     }
 
+    @Transactional
     @Override
-    public boolean deleteOrder(Order order) {
-        return false;
+    public String userCancelById(String requestId) {
+        Order ordersDB = orderMapper.selectById(requestId);
+        // 校验订单是否存在
+        if (ordersDB == null) {
+            throw new CustomException("订单不存在");
+        }
+
+        switch (ordersDB.getStatus()) {
+            case "processing":
+                // 执行取消操作
+                ordersDB.setStatus("cancelled");
+                orderMapper.update(ordersDB);
+                return  "cancelled";
+            case "completed":
+                // 订单已经完成，不能取消
+                return "completed";
+            case "cancelled":
+                // 订单已取消
+                return "cancelled";
+            default:
+                // 其他情况
+                return "cancel failed";
+        }
+
     }
 
+
+
     @Override
-    public Optional<Order> getOrderById(String orderId) {
-        return Optional.empty();
+    public String getOrderStatus(String orderId) {
+        int maxRetry = 10;
+        int retry = 0;
+
+        while (retry < maxRetry) {
+            order = orderMapper.selectById(orderId);
+            if (order != null) {
+                if(order.getStatus().equals("completed") || order.getStatus().equals("failed")){
+                    return order.getStatus();
+                }
+                retry++;
+                try {
+                    Thread.sleep(5000);
+                }catch (InterruptedException e){
+                    Thread.currentThread().interrupt();
+                }
+            }else {
+                throw new CustomException("订单不存在");
+            }
+        }
+        return "processing";
     }
 }
